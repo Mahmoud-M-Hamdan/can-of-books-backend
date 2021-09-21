@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
 
 const Book = new mongoose.Schema({
 
@@ -35,28 +34,28 @@ booksList = [
         status: "Readed",
         email: 'book@gmailcom'
     },
-    {
-        title: "Mastery",
-        description: "Lorem ipsum......",
-        status: "Readed",
-        email: 'book@gmailcom'
-    },
-    {
-        title: "Mastery",
-        description: "Lorem ipsum......",
-        status: "Readed",
-        email: 'book@gmailcom'
-    }
+
 ]
 
+function bookSeed() {
 
+    booksList.map(book => {
+        let myBook = new bookModel({
+            title: book.title,
+            description: book.description,
+            status: book.status,
+            email: book.email
+        })
+        myBook.save();
+    });
+}
 
 
 // Export the Article model
 module.exports = {
 
     bookModel,
-    booksList
+    bookSeed
 }
 
 

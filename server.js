@@ -6,43 +6,37 @@ require("dotenv").config();
 const cors = require('cors');
 const PORT = process.env.PORT
 const MONGO_SERVER = process.env.MONGO_SERVER
+const {deleteBookController,createBookController,getBookController,updateBookController}=require('./Controllers/controller')
 
-
-
+app.use(express.json())
 app.use(cors())
 
 const mongoose = require("mongoose");
-const { bookModel } = require("./model");
+// const { bookModel,bookSeed } = require("./Models/model");
 
 
 
-mongoose.connect(`${MONGO_SERVER}/bookStore`, { useNewUrlParser: true, useUnifiedTopology: true });
-app.get('/seed-data', getBooksByOwnerEmail)
+mongoose.connect(`${MONGO_SERVER}`, { useNewUrlParser: true, useUnifiedTopology: true });
+// app.get('/seed-data', getBooks)
+app.get('/',getBookController);
+app.put('/update-book/:id',updateBookController)
+app.delete('/delete-book/:id',deleteBookController)
+app.post('/create-book',createBookController)
 
 
+// function getBooks(req, res) {
+//     bookModel.find({ }, function (err, bookData) {
+//         if (err) {
+//             res.send(err);
+//         } else {
+//             res.send(bookData)
+//         }
 
-function getBooksByOwnerEmail(req, res) {
-    let ownerEmail = req.query.ownerEmail;
-    bookModel.find({ email: ownerEmail }, function (err, bookData) {
-        if (err) {
-            res.send(err);
-        } else {
-            res.send(bookData)
-        }
+//     })
+// }
+//bookSeed();
 
-    })
-}
-/*
-fillBestBooksWithData();
-*/
 
-function fillBestBooksWithData() {
-
-    booksList.map(book => {
-        let myBook = new bookModel({ title:book.title,description: book.description,status:book.status , email: book.email })
-        myBook.save();
-    });
-}
 
 
 app.get('/', // our endpoint name
@@ -53,3 +47,4 @@ app.get('/', // our endpoint name
 app.listen(PORT, () => {
     console.log(`Listening to port ${PORT}`);
 })
+
